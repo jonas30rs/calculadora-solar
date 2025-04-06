@@ -2,7 +2,7 @@
 
 Sistema web simples e funcional para ajudar no dimensionamento de sistemas de energia solar off-grid, ideal para zonas rurais e locais sem acesso à rede elétrica.
 
-![screenshot](https://via.placeholder.com/900x400.png?text=Exemplo+de+Interface) <!-- Você pode trocar por uma imagem real do sistema -->
+![screenshot]([https://via.placeholder.com/900x400.png?text=Exemplo+de+Interface](https://github.com/jonas30rs/calculadora-solar/blob/main/Captura%20de%20tela%202025-04-05%20223726.png)) <!-- Você pode trocar por uma imagem real do sistema -->
 
 ---
 
