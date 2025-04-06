@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Calculadora Solar Off-grid</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"/>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet"/>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+<div class="container py-5">
+  <h1 class="text-center mb-4"><i class="bi bi-sun"></i> Calculadora Solar Off-grid</h1>
+
+  <div class="card mb-4 shadow-sm">
+    <div class="card-body">
+      <form id="energyForm" class="row g-3">
+        <div class="col-md-4">
+          <label class="form-label">Equipamento:</label>
+          <input type="text" class="form-control" id="equipment" required />
+        </div>
+        <div class="col-md-2">
+          <label class="form-label">Qtd:</label>
+          <input type="number" class="form-control" id="quantity" min="1" required />
+        </div>
+        <div class="col-md-2">
+          <label class="form-label">Potência (W):</label>
+          <input type="number" class="form-control" id="power" required />
+        </div>
+        <div class="col-md-2">
+          <label class="form-label">Horas/dia:</label>
+          <input type="number" class="form-control" id="hours" min="0" value="0" />
+        </div>
+        <div class="col-md-2">
+          <label class="form-label">Minutos/dia:</label>
+          <input type="number" class="form-control" id="minutes" min="0" max="59" value="0" />
+        </div>
+        <div class="col-12">
+          <button type="submit" class="btn btn-success w-100">
+            <i class="bi bi-plus-circle"></i> Adicionar Equipamento
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="row g-3 mb-4">
+    <div class="col-md-4">
+      <label class="form-label">Horas de sol por dia:</label>
+      <input type="number" class="form-control" id="sunHours" value="5" min="1" />
+    </div>
+    <div class="col-md-4">
+      <label class="form-label">Tensão do sistema (V):</label>
+      <input type="number" class="form-control" id="systemVoltage" value="24" />
+    </div>
+    <div class="col-md-4">
+      <label class="form-label">Autonomia (dias):</label>
+      <div class="input-group">
+        <input type="number" class="form-control" id="autonomyDays" value="1" min="1" />
+        <button id="clearBtn" class="btn btn-outline-danger" type="button">
+          <i class="bi bi-trash"></i> Limpar
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="table-responsive mb-4">
+    <table class="table table-bordered table-striped" id="equipmentList">
+      <thead class="table-dark">
+        <tr>
+          <th>Equipamento</th>
+          <th>Qtd</th>
+          <th>Potência (W)</th>
+          <th>Tempo (h:min)</th>
+          <th>Consumo (kWh)</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </div>
+
+  <div class="row g-3">
+    <div class="col-md-4">
+      <div class="card text-bg-light shadow-sm">
+        <div class="card-body text-center">
+          <h6 class="card-title">Consumo Diário</h6>
+          <h4><i class="bi bi-lightning-charge"></i> <span id="totalConsumption">0</span> kWh</h4>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="card text-bg-light shadow-sm">
+        <div class="card-body text-center">
+          <h6 class="card-title">Tamanho do Sistema</h6>
+          <h4><i class="bi bi-solar-panel"></i> <span id="systemSize">0</span> kWp</h4>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="card text-bg-light shadow-sm">
+        <div class="card-body text-center">
+          <h6 class="card-title">Placas de 330W</h6>
+          <h4><i class="bi bi-grid-1x2"></i> <span id="panelCount">0</span> un.</h4>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="card text-bg-light shadow-sm">
+        <div class="card-body text-center">
+          <h6 class="card-title">Baterias</h6>
+          <h4><i class="bi bi-battery-full"></i> <span id="batteryCapacity">0</span> Ah</h4>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="card text-bg-light shadow-sm">
+        <div class="card-body text-center">
+          <h6 class="card-title">Inversor</h6>
+          <h4><i class="bi bi-plug"></i> <span id="inverterPower">0</span> W</h4>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Botão PDF -->
+  <div class="text-center my-4">
+    <button onclick="generatePDF()" class="btn btn-primary">
+      <i class="bi bi-download"></i> Baixar Relatório (PDF)
+    </button>
+  </div>
+</div>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+
+<!-- Script principal -->
+<script src="script.js"></script>
+
+<!-- Lib para exportar PDF -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
+<script>
+  function generatePDF() {
+    const element = document.querySelector('.container');
+    html2pdf().from(element).set({
+      margin: 0.5,
+      filename: 'relatorio_solar.pdf',
+      html2canvas: { scale: 2 },
+      jsPDF: { orientation: 'portrait', unit: 'in', format: 'a4' }
+    }).save();
+  }
+</script>
+</body>
+</html>
